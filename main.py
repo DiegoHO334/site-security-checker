@@ -1,5 +1,6 @@
 from checks.https_check import check_https
 from checks.headers_check import check_headers
+from checks.version_leak_check import check_version_leak
 
 
 def main():
@@ -21,6 +22,15 @@ def main():
         print(f"  {name}: {value if value is not None else 'MISSING'}")
     if headers_result["error"]:
         print(f"Error: {headers_result['error']}")
+
+    version_result = check_version_leak(url)
+    print()
+    print("Server version leaks:")
+    for name, value in version_result["headers"].items():
+        flag = " (LEAK: version exposed)" if name in version_result["leaks"] else ""
+        print(f"  {name}: {value if value is not None else 'not present'}{flag}")
+    if version_result["error"]:
+        print(f"Error: {version_result['error']}")
 
 
 if __name__ == "__main__":
