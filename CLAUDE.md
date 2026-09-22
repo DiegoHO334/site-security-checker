@@ -7,10 +7,10 @@ outputs a report with an overall score.
 ## Status
 
 HTTPS/certificate check (`checks/https_check.py`), security headers
-check (`checks/headers_check.py`), and server version leak check
-(`checks/version_leak_check.py`) all exist, wired up in `main.py`.
-Scoring and a combined report output are NOT built yet — do not
-assume they exist.
+check (`checks/headers_check.py`), server version leak check
+(`checks/version_leak_check.py`), scoring (`checks/scoring.py`), and
+a combined report (`report.py`, formats a 0-100 score + letter grade)
+all exist and are wired up in `main.py`. No web interface yet.
 
 Published to GitHub: https://github.com/DiegoHO334/site-security-checker
 
