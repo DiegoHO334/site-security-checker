@@ -15,6 +15,17 @@ and a Flask web app (`app.py`, `templates/index.html`,
 `static/style.css`) with a URL form and styled results. Run the web
 app with `python3 app.py` (dev server on http://127.0.0.1:5000).
 
+A pytest suite (`tests/`, 18 tests) covers all four check modules plus
+report.py, using unittest.mock to fake network calls (requests.get,
+socket.create_connection, ssl.create_default_context) so tests run
+fast and offline. Dev-only deps (pytest) live in `requirements-dev.txt`,
+separate from `requirements.txt`. Run with `python3 -m pytest -v`.
+
+This is considered feature-complete for the original scope (checks +
+scoring + report + CLI + web UI + tests). The user's stated goal for
+this round of work was specifically to learn the testing/verification
+process, not just add features.
+
 Published to GitHub: https://github.com/DiegoHO334/site-security-checker
 
 ## User background
