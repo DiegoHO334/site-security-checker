@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Site Security Checker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main>
+    <h1>Site Security Checker</h1>
+
+    <form method="post">
+      <input
+        type="text"
+        name="url"
+        placeholder="https://example.com"
+        value="{{ request.form.get('url', '') }}"
+        required
+      >
+      <button type="submit">Check</button>
+    </form>
+
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if report %}
+      <section class="report">
+        <h2>Report for {{ report.url }}</h2>
+
+        <div class="score grade-{{ report.score.grade | lower }}">
+          <span class="score-number">{{ report.score.total }}/100</span>
+          <span class="score-grade">Grade {{ report.score.grade }}</span>
+        </div>
+
+        <section class="check">
+          <h3>HTTPS / Certificate ({{ report.score.https_score }}/{{ report.score.https_max }})</h3>
+          <ul>
+            <li class="{{ 'pass' if report.https.uses_https else 'fail' }}">
+              Uses HTTPS: {{ report.https.uses_https }}
+            </li>
+            <li class="{{ 'pass' if report.https.cert_valid else 'fail' }}">
+              Certificate valid: {{ report.https.cert_valid }}
+            </li>
+            {% if report.https.days_until_expiry is not none %}
+              <li>Days until expiry: {{ report.https.days_until_expiry }}</li>
+            {% endif %}
+            {% if report.https.error %}
+              <li class="fail">Error: {{ report.https.error }}</li>
+            {% endif %}
+          </ul>
+        </section>
+
+        <section class="check">
+          <h3>Security Headers ({{ report.score.headers_score }}/{{ report.score.headers_max }})</h3>
+          <ul>
+            {% for name, value in report.headers.headers.items() %}
+              <li class="{{ 'pass' if value else 'fail' }}">
+                {{ name }}: {{ value if value else 'MISSING' }}
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
+
+        <section class="check">
+          <h3>Server Version Leaks ({{ report.score.version_score }}/{{ report.score.version_max }})</h3>
+          <ul>
+            {% for name, value in report.version.headers.items() %}
+              <li class="{{ 'fail' if name in report.version.leaks else 'pass' }}">
+                {{ name }}: {{ value if value else 'not present' }}
+                {% if name in report.version.leaks %}(LEAK){% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
+      </section>
+    {% endif %}
+  </main>
+</body>
+</html>

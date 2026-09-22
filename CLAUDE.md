@@ -10,7 +10,10 @@ HTTPS/certificate check (`checks/https_check.py`), security headers
 check (`checks/headers_check.py`), server version leak check
 (`checks/version_leak_check.py`), scoring (`checks/scoring.py`), and
 a combined report (`report.py`, formats a 0-100 score + letter grade)
-all exist and are wired up in `main.py`. No web interface yet.
+all exist. Two front ends both reuse report.py: the CLI (`main.py`)
+and a Flask web app (`app.py`, `templates/index.html`,
+`static/style.css`) with a URL form and styled results. Run the web
+app with `python3 app.py` (dev server on http://127.0.0.1:5000).
 
 Published to GitHub: https://github.com/DiegoHO334/site-security-checker
 
